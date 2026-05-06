@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Descubriendo Tu Lugar | Iglesia Faro del Evangelio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Lato', sans-serif; background: #0a0a14; color: #f0ede6; overflow-x: hidden; }
+
+  nav { position: fixed; top: 0; width: 100%; background: rgba(10,10,20,0.92); backdrop-filter: blur(8px); z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; border-bottom: 1px solid rgba(212,175,110,0.2); transition: padding 0.3s; }
+  nav.scrolled { padding: 0.6rem 3rem; }
+  .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .nav-logo img { height: 42px; width: 42px; object-fit: cover; border-radius: 50%; border: 1px solid rgba(212,175,110,0.4); transition: transform 0.3s; }
+  .nav-logo img:hover { transform: rotate(5deg) scale(1.05); }
+  .nav-logo span { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #d4af6e; letter-spacing: 1px; }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a { color: #c8c0b0; text-decoration: none; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.3s; position: relative; }
+  .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: #d4af6e; transition: width 0.3s; }
+  .nav-links a:hover { color: #d4af6e; }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* HERO */
+  .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: url('https://static.wixstatic.com/media/b9c5bd_d2c0183406314c7ea258692e96765841~mv2.jpg/v1/fill/w_817,h_590,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202026-02-02%20at%203_38_edited.jpg') center/cover; opacity: 0.35; transform: scale(1.05); transition: transform 8s ease; }
+  .hero-bg.loaded { transform: scale(1); }
+  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,10,20,0.3) 0%, rgba(10,10,20,0.7) 100%); }
+  .hero-content { position: relative; z-index: 2; max-width: 750px; padding: 0 2rem; }
+  .hero-badge { display: inline-block; border: 1px solid #d4af6e; color: #d4af6e; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; padding: 0.4rem 1.2rem; margin-bottom: 2rem; opacity: 0; animation: fadeDown 0.8s 0.3s forwards; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1.1; margin-bottom: 1.5rem; color: #fff; opacity: 0; animation: fadeDown 0.8s 0.6s forwards; }
+  .hero-title em { color: #d4af6e; font-style: normal; }
+  .hero-subtitle { font-size: 1.05rem; font-weight: 300; color: #c8c0b0; line-height: 1.8; margin-bottom: 2.5rem; font-style: italic; opacity: 0; animation: fadeDown 0.8s 0.9s forwards; }
+  .hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; opacity: 0; animation: fadeDown 0.8s 1.2s forwards; }
+  .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; opacity: 0; animation: fadeIn 1s 2s forwards; }
+  .scroll-hint span { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(212,175,110,0.5); }
+  .scroll-arrow { width: 1px; height: 40px; background: linear-gradient(to bottom, #d4af6e, transparent); animation: scrollPulse 2s infinite; }
+
+  @keyframes fadeDown { from { opacity:0; transform: translateY(-20px); } to { opacity:1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes scrollPulse { 0%,100% { opacity:0.3; transform: scaleY(1); } 50% { opacity:1; transform: scaleY(1.2); } }
+
+  .btn-primary { background: #d4af6e; color: #0a0a14; padding: 0.85rem 2rem; font-size: 0.82rem; letter-spacing: 2px; text-transform: uppercase; border: none; cursor: pointer; font-weight: 700; text-decoration: none; display: inline-block; transition: background 0.3s, transform 0.2s, box-shadow 0.3s; }
+  .btn-primary:hover { background: #e8c98a; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212,175,110,0.3); }
+  .btn-outline { background: transparent; color: #d4af6e; padding: 0.85rem 2rem; font-size: 0.82rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid #d4af6e; cursor: pointer; font-weight: 400; text-decoration: none; display: inline-block; transition: all 0.3s; }
+  .btn-outline:hover { background: rgba(212,175,110,0.1); transform: translateY(-2px); }
+
+  /* SECTIONS */
+  section { padding: 6rem 3rem; }
+  .section-label { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: #d4af6e; margin-bottom: 1rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.8rem); color: #f0ede6; margin-bottom: 1.5rem; }
+  .section-body { font-size: 1rem; line-height: 1.9; color: #a09880; max-width: 600px; }
+  .divider { width: 60px; height: 2px; background: #d4af6e; margin: 1.5rem 0; transition: width 0.8s ease; }
+  .divider.expanded { width: 120px; }
+
+  /* SCROLL ANIMATIONS */
+  .anim-fade-up   { opacity: 0; transform: translateY(50px);  transition: opacity 0.9s ease, transform 0.9s ease; }
+  .anim-fade-left { opacity: 0; transform: translateX(-60px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .anim-fade-right{ opacity: 0; transform: translateX(60px);  transition: opacity 0.9s ease, transform 0.9s ease; }
+  .anim-zoom      { opacity: 0; transform: scale(0.9);         transition: opacity 0.9s ease, transform 0.9s ease; }
+  .anim-stagger   { opacity: 0; transform: translateY(40px);  transition: opacity 0.7s ease, transform 0.7s ease; }
+
+  .anim-fade-up.visible,
+  .anim-fade-left.visible,
+  .anim-fade-right.visible,
+  .anim-zoom.visible,
+  .anim-stagger.visible { opacity: 1; transform: none; }
+
+  /* ABOUT */
+  .about { background: #0e0e1a; }
+  .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1100px; margin: 0 auto; }
+  .about-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(212,175,110,0.2); transition: box-shadow 0.4s; }
+  .about-img:hover { box-shadow: 0 0 40px rgba(212,175,110,0.15); }
+  .scripture { margin-top: 2rem; padding-left: 1.2rem; border-left: 2px solid #d4af6e; }
+  .scripture p { font-style: italic; color: #c8b888; font-size: 0.95rem; line-height: 1.8; }
+  .scripture cite { display: block; margin-top: 0.5rem; color: #d4af6e; font-size: 0.78rem; letter-spacing: 2px; font-style: normal; text-transform: uppercase; }
+
+  /* VISION */
+  .vision { background: #0a0a14; }
+  .vision-inner { max-width: 800px; margin: 0 auto; text-align: center; }
+  .vision-inner .section-body { margin: 0 auto; text-align: left; }
+
+  /* MINISTERIOS */
+  .ministerios { background: #0e0e1a; }
+  .ministerios-inner { max-width: 1100px; margin: 0 auto; }
+  .min-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 3rem; }
+  .min-card { position: relative; aspect-ratio: 4/3; overflow: hidden; cursor: pointer; }
+  .min-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
+  .min-card:hover img { transform: scale(1.08); }
+  .min-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,20,0.92) 0%, rgba(10,10,20,0.05) 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem; transition: background 0.4s; }
+  .min-card:hover .min-overlay { background: linear-gradient(to top, rgba(10,10,20,0.95) 0%, rgba(10,10,20,0.2) 60%); }
+  .min-tag { font-size: 0.65rem; letter-spacing: 3px; color: #d4af6e; text-transform: uppercase; margin-bottom: 0.3rem; transform: translateY(5px); transition: transform 0.4s; }
+  .min-card:hover .min-tag { transform: translateY(0); }
+  .min-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #fff; }
+  .min-desc { font-size: 0.8rem; color: #a09880; margin-top: 0.5rem; max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+  .min-card:hover .min-desc { max-height: 60px; }
+
+  /* SERVIR */
+  .servir { background: #0a0a14; }
+  .servir-inner { max-width: 1100px; margin: 0 auto; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 3rem 0; }
+  .step { text-align: center; padding: 2.5rem 1.5rem; border: 1px solid rgba(212,175,110,0.15); position: relative; transition: border-color 0.4s, transform 0.4s, box-shadow 0.4s; cursor: default; }
+  .step:hover { border-color: rgba(212,175,110,0.5); transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  .step-num { font-family: 'Playfair Display', serif; font-size: 3rem; color: rgba(212,175,110,0.15); position: absolute; top: 1rem; left: 1.5rem; line-height: 1; transition: color 0.4s; }
+  .step:hover .step-num { color: rgba(212,175,110,0.4); }
+  .step-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #d4af6e; margin-bottom: 0.75rem; margin-top: 1rem; }
+  .step-body { font-size: 0.9rem; color: #a09880; line-height: 1.7; }
+
+  .areas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
+  .area-card { padding: 1.5rem; border: 1px solid rgba(212,175,110,0.15); transition: border-color 0.3s, transform 0.3s, background 0.3s; cursor: default; }
+  .area-card:hover { border-color: rgba(212,175,110,0.5); transform: translateY(-4px); background: rgba(212,175,110,0.03); }
+  .area-name { font-family: 'Playfair Display', serif; font-size: 1rem; color: #d4af6e; margin-bottom: 0.5rem; }
+  .area-desc { font-size: 0.85rem; color: #807060; line-height: 1.7; }
+
+  /* DISCIPULADO */
+  .discipulado { background: #0e0e1a; }
+  .discipulado-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1100px; margin: 0 auto; }
+  .discipulado-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(212,175,110,0.2); transition: box-shadow 0.4s; }
+  .discipulado-img:hover { box-shadow: 0 0 40px rgba(212,175,110,0.15); }
+
+  /* WORSHIP */
+  .worship { background: #0a0a14; }
+  .worship-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1100px; margin: 0 auto; }
+  .worship-imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .worship-imgs img { width: 100%; aspect-ratio: 1; object-fit: cover; transition: transform 0.5s, filter 0.5s; filter: brightness(0.85); }
+  .worship-imgs img:hover { transform: scale(1.04); filter: brightness(1); }
+
+  /* GRANERO */
+  .granero { background: #0e0e1a; }
+  .granero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1100px; margin: 0 auto; }
+  .granero-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(212,175,110,0.2); transition: box-shadow 0.4s; }
+  .granero-img:hover { box-shadow: 0 0 40px rgba(212,175,110,0.15); }
+
+  /* STATS — animated counters */
+  .stats { background: #d4af6e; padding: 4rem 3rem; }
+  .stats-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; gap: 2rem; }
+  .stat-block { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .stat-block.visible { opacity: 1; transform: none; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 3rem; color: #0a0a14; font-weight: 700; line-height: 1; }
+  .stat-label { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(10,10,20,0.55); margin-top: 0.5rem; }
+  .stat-divider { width: 30px; height: 1px; background: rgba(10,10,20,0.2); margin: 0.75rem auto; }
+
+  /* CONTACTO */
+  .contacto { background: #0a0a14; }
+  .contacto-inner { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+  .contact-info-item { margin-bottom: 1.5rem; }
+  .contact-info-label { display: block; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: #d4af6e; margin-bottom: 0.3rem; }
+  .contact-info-value { font-size: 1rem; color: #c8c0b0; }
+  .contact-info-value a { color: #c8c0b0; text-decoration: none; transition: color 0.3s; }
+  .contact-info-value a:hover { color: #d4af6e; }
+  .social-links { display: flex; gap: 1rem; margin-top: 0.5rem; }
+  .social-btn { padding: 0.6rem 1.2rem; border: 1px solid rgba(212,175,110,0.3); color: #d4af6e; text-decoration: none; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s; }
+  .social-btn:hover { background: rgba(212,175,110,0.1); border-color: #d4af6e; transform: translateY(-2px); }
+
+  .form-group { margin-bottom: 1.2rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group label { display: block; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: #806850; margin-bottom: 0.4rem; }
+  .form-group input, .form-group textarea, .form-group select { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,110,0.2); color: #f0ede6; padding: 0.75rem 1rem; font-family: 'Lato', sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.3s, box-shadow 0.3s; }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: #d4af6e; box-shadow: 0 0 0 3px rgba(212,175,110,0.08); }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-group select option { background: #0e0e1a; }
+  .form-success { display: none; text-align: center; padding: 2.5rem; border: 1px solid rgba(212,175,110,0.3); color: #d4af6e; font-family: 'Playfair Display', serif; font-size: 1.3rem; animation: fadeIn 0.6s forwards; }
+
+  footer { background: #060610; padding: 3rem; text-align: center; border-top: 1px solid rgba(212,175,110,0.15); }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #d4af6e; margin-bottom: 1rem; }
+  .footer-text { font-size: 0.8rem; color: #504840; letter-spacing: 1px; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .about-inner, .worship-inner, .granero-inner, .discipulado-inner, .contacto-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .min-grid, .areas-grid { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <a href="#" class="nav-logo">
+    <img src="logo.jpeg" alt="Logo Iglesia Faro del Evangelio" />
+    <span>Descubriendo Tu Lugar</span>
+  </a>
+  <div class="nav-links">
+    <a href="#acerca">Acerca</a>
+    <a href="#ministerios">Ministerios</a>
+    <a href="#servir">Servir</a>
+    <a href="#discipulado">Discipulado</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Iglesia Faro del Evangelio · Tarrazú</div>
+    <h1 class="hero-title">Da el<br><em>Primer Paso</em></h1>
+    <p class="hero-subtitle">"Creemos que Dios forma primero el corazón,<br>y luego nos guía al lugar correcto."</p>
+    <div class="hero-ctas">
+      <a href="#ministerios" class="btn-primary">Conocer más</a>
+      <a href="#contacto" class="btn-outline">Hablar con alguien</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Descubrir</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</div>
+
+<section class="about" id="acerca">
+  <div class="about-inner">
+    <div class="anim-fade-left">
+      <p class="section-label">Acerca de nosotros</p>
+      <h2 class="section-title">Una comunidad viva en Cristo</h2>
+      <div class="divider" id="divider1"></div>
+      <p class="section-body">Nuestra congregación es un espacio de comunión, crecimiento espiritual y servicio, donde buscamos conocer a Dios, fortalecer nuestra fe y vivir los principios bíblicos en comunidad.</p>
+      <p class="section-body" style="margin-top:1rem;">A través de la enseñanza, el discipulado y la participación activa, procuramos formar personas comprometidas con su caminar cristiano y con el servicio a los demás.</p>
+      <div class="scripture">
+        <p>Porque yo sé muy bien los planes que tengo para ustedes, planes de bienestar y no de calamidad, a fin de darles un futuro y una esperanza.</p>
+        <cite>Jeremías 29:11</cite>
+      </div>
+    </div>
+    <div class="anim-fade-right">
+      <img class="about-img" src="https://static.wixstatic.com/media/b9c5bd_6dd72e11eb6d4a93ab2d1c99a146d2c3~mv2.jpg/v1/crop/x_33,y_0,w_621,h_506/fill/w_583,h_475,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Igle_edited.jpg" alt="Congregación" />
+    </div>
+  </div>
+</section>
+
+<section class="vision" id="vision">
+  <div class="vision-inner anim-fade-up">
+    <p class="section-label" style="text-align:center;">Nuestra visión</p>
+    <h2 class="section-title" style="text-align:center;">Jesús es el Señor</h2>
+    <div class="divider" style="margin:1.5rem auto;"></div>
+    <p class="section-body">Debemos luchar para que las personas con quienes hablamos o se acercan a la iglesia, se sientan de la mejor manera, logrando así entender que lo más especial que nos puede suceder es conocer al Señor y experimentar en Él tantas bendiciones.</p>
+    <br>
+    <p class="section-body">Lograr también entender la necesidad que tenemos de aceptar al Señor Jesucristo como nuestro Salvador y Señor, pues solo en Él podemos tener la salvación eterna de nuestra alma. (Hechos 4:12)</p>
+    <br>
+    <p class="section-body">Él es el Camino, la Verdad y la Vida. — Juan 14:6</p>
+  </div>
+</section>
+
+<section class="ministerios" id="ministerios">
+  <div class="ministerios-inner">
+    <div class="anim-fade-up">
+      <p class="section-label">Lo que hacemos</p>
+      <h2 class="section-title">Nuestros ministerios</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="min-grid">
+      <div class="min-card anim-stagger" style="transition-delay:0.0s">
+        <img src="damas.png" alt="Ministerio de Damas" />
+        <div class="min-overlay">
+          <span class="min-tag">Mujeres</span>
+          <span class="min-title">Ministerio de Damas</span>
+          <span class="min-desc">Espacio de comunión y crecimiento dirigido a mujeres.</span>
+        </div>
+      </div>
+      <div class="min-card anim-stagger" style="transition-delay:0.1s">
+        <img src="Niños.jpeg" alt="Ministerio de Niños" />
+        <div class="min-overlay">
+          <span class="min-tag">Infantes</span>
+          <span class="min-title">Ministerio de Niños</span>
+          <span class="min-desc">Enseñanza dominical en un ambiente seguro y organizado.</span>
+        </div>
+      </div>
+      <div class="min-card anim-stagger" style="transition-delay:0.2s">
+        <img src="discipulado.png" alt="Discipulado" />
+        <div class="min-overlay">
+          <span class="min-tag">Formación</span>
+          <span class="min-title">Discipulado</span>
+          <span class="min-desc">Acompañamiento y crecimiento espiritual personal.</span>
+        </div>
+      </div>
+      <div class="min-card anim-stagger" style="transition-delay:0.3s">
+        <img src="GENERAL_jpg.jpeg" alt="Culto General" />
+        <div class="min-overlay">
+          <span class="min-tag">Congregación</span>
+          <span class="min-title">Culto General</span>
+          <span class="min-desc">Reunión dominical de toda la congregación.</span>
+        </div>
+      </div>
+      <div class="min-card anim-stagger" style="transition-delay:0.4s">
+        <img src="GRUPO1_jpg.jpeg" alt="Grupos de Estudio" />
+        <div class="min-overlay">
+          <span class="min-tag">Comunidad</span>
+          <span class="min-title">Grupos de Estudio</span>
+          <span class="min-desc">Estudio bíblico en grupos pequeños de comunión.</span>
+        </div>
+      </div>
+      <div class="min-card anim-stagger" style="transition-delay:0.5s">
+        <img src="GRUPO2_jpg.jpeg" alt="Grupos de Estudio" />
+        <div class="min-overlay">
+          <span class="min-tag">Comunidad</span>
+          <span class="min-title">Grupos de Estudio</span>
+          <span class="min-desc">Formación continua en la Palabra de Dios.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="servir" id="servir">
+  <div class="servir-inner">
+    <div class="anim-fade-up">
+      <p class="section-label">Únete al equipo</p>
+      <h2 class="section-title">¿Quieres servir?</h2>
+      <div class="divider"></div>
+      <p class="section-body">Servir es una expresión práctica de la fe cristiana y una respuesta al llamado de Dios para contribuir al crecimiento y edificación de la comunidad. No se limita a una función específica, sino que implica disposición, compromiso y responsabilidad.</p>
+    </div>
+    <div class="steps">
+      <div class="step anim-stagger" style="transition-delay:0s">
+        <span class="step-num">1</span>
+        <div class="step-title">Primer acercamiento</div>
+        <p class="step-body">Integrarse a la congregación y conocer nuestra comunidad de fe.</p>
+      </div>
+      <div class="step anim-stagger" style="transition-delay:0.15s">
+        <span class="step-num">2</span>
+        <div class="step-title">Discipulado</div>
+        <p class="step-body">Formación y crecimiento espiritual que fortalece el carácter y la fe.</p>
+      </div>
+      <div class="step anim-stagger" style="transition-delay:0.3s">
+        <span class="step-num">3</span>
+        <div class="step-title">Servicio</div>
+        <p class="step-body">Poner la fe en acción, sirviendo donde Dios te ha llamado.</p>
+      </div>
+    </div>
+    <div class="anim-fade-up">
+      <p class="section-label" style="margin-top:2rem;">Áreas de servicio</p>
+      <div class="areas-grid">
+        <div class="area-card anim-stagger" style="transition-delay:0.0s"><div class="area-name">Ministerio de Niños</div><p class="area-desc">Enseñanza dominical en ambiente seguro y organizado.</p></div>
+        <div class="area-card anim-stagger" style="transition-delay:0.05s"><div class="area-name">Ministerio de Alabanza</div><p class="area-desc">Guiar la congregación en adoración con excelencia.</p></div>
+        <div class="area-card anim-stagger" style="transition-delay:0.10s"><div class="area-name">Ministerio de Jóvenes</div><p class="area-desc">Crecimiento espiritual y participación activa juvenil.</p></div>
+        <div class="area-card anim-stagger" style="transition-delay:0.15s"><div class="area-name">Ministerio de Multimedia</div><p class="area-desc">Proyección, redes sociales y edición audiovisual.</p></div>
+        <div class="area-card anim-stagger" style="transition-delay:0.20s"><div class="area-name">Grupo de Oración</div><p class="area-desc">Intercesión y búsqueda de Dios en comunidad.</p></div>
+        <div class="area-card anim-stagger" style="transition-delay:0.25s"><div class="area-name">Enseñanza y Dirección</div><p class="area-desc">Apoyo a la enseñanza bíblica y conducción de servicios.</p></div>
+        <div class="area-card anim-stagger" style="transition-delay:0.30s"><div class="area-name">Ministerio de Artes</div><p class="area-desc">Expresiones artísticas para comunicar mensajes de fe.</p></div>
+        <div class="area-card anim-stagger" style="transition-delay:0.35s"><div class="area-name">Hospitalidad y Apoyo</div><p class="area-desc">Recibir personas y colaborar en el orden de servicios.</p></div>
+        <div class="area-card anim-stagger" style="transition-delay:0.40s"><div class="area-name">Grupo de Damas</div><p class="area-desc">Comunión y crecimiento para mujeres de la iglesia.</p></div>
+        <div class="area-card anim-stagger" style="transition-delay:0.45s"><div class="area-name">Grupo de Varones</div><p class="area-desc">Fortalecimiento espiritual y liderazgo masculino.</p></div>
+        <div class="area-card anim-stagger" style="transition-delay:0.50s"><div class="area-name">Mantenimiento Físico</div><p class="area-desc">Cuidado y bienestar de las instalaciones de la iglesia.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="discipulado" id="discipulado">
+  <div class="discipulado-inner">
+    <div class="anim-fade-left">
+      <p class="section-label">Formación espiritual</p>
+      <h2 class="section-title">¿Qué es el discipulado?</h2>
+      <div class="divider"></div>
+      <p class="section-body">El discipulado es un proceso de acompañamiento y crecimiento espiritual, donde aprendemos a conocer a Dios, fortalecer nuestra fe y vivirla de manera práctica en nuestra vida diaria.</p>
+      <br>
+      <p class="section-body">A través de la enseñanza bíblica, la oración y la comunión, cada persona es acompañada en su caminar con Cristo, respetando su proceso y tiempo espiritual.</p>
+      <br>
+      <a href="#contacto" class="btn-outline" style="margin-top:1rem; display:inline-block;">Quiero iniciar discipulado</a>
+    </div>
+    <div class="anim-fade-right">
+      <img class="discipulado-img" src="discipulado.png" alt="Discipulado" />
+    </div>
+  </div>
+</section>
+
+<section class="worship">
+  <div class="worship-inner">
+    <div class="worship-imgs anim-zoom">
+      <img src="GRUPO1_jpg.jpeg" alt="Alabanza" />
+      <img src="GRANERO_jpg.jpeg" alt="Granero" />
+      <img src="DIBUJO.jpeg" alt="Niños coloreando" />
+      <img src="GENERAL_jpg.jpeg" alt="Culto" />
+    </div>
+    <div class="anim-fade-right">
+      <p class="section-label">Alabanza y adoración</p>
+      <h2 class="section-title">Música que eleva el corazón</h2>
+      <div class="divider"></div>
+      <p class="section-body">Nuestro equipo de alabanza guía a la congregación en momentos de adoración genuina. La música es puerta de encuentro con Dios, y cada servicio es una oportunidad para elevar nuestros corazones juntos.</p>
+      <br>
+      <p class="section-body">Cada domingo celebramos con canciones, oración y la Palabra, en un ambiente donde todos son bienvenidos tal como son.</p>
+    </div>
+  </div>
+</section>
+
+<section class="granero">
+  <div class="granero-inner">
+    <div class="anim-fade-left">
+      <p class="section-label">Servicio a la comunidad</p>
+      <h2 class="section-title">El Granero: amor en acción</h2>
+      <div class="divider"></div>
+      <p class="section-body">Distribuimos canastas con víveres y un mensaje de esperanza a familias que lo necesitan en nuestra comunidad de Tarrazú. Porque la fe sin obras está muerta, y nosotros creemos en servir con manos y corazón.</p>
+      <br>
+      <p class="section-body">Cada canasta lleva el texto de Jeremías 29:11 como recordatorio de que Dios tiene planes de bien para cada familia.</p>
+      <br>
+      <a href="#contacto" class="btn-outline" style="margin-top:1rem; display:inline-block;">Quiero ayudar</a>
+    </div>
+    <div class="anim-fade-right">
+      <img class="granero-img" src="GRANERO_jpg.jpeg" alt="El Granero" />
+    </div>
+  </div>
+</section>
+
+<!-- STATS con contadores animados -->
+<div class="stats" id="statsSection">
+  <div class="stats-inner">
+    <div class="stat-block" data-target="10" data-prefix="+" data-suffix="">
+      <div class="stat-num" id="stat0">0</div>
+      <div class="stat-divider"></div>
+      <div class="stat-label">Áreas de servicio</div>
+    </div>
+    <div class="stat-block" data-target="7" data-prefix="" data-suffix="">
+      <div class="stat-num" id="stat1">0</div>
+      <div class="stat-divider"></div>
+      <div class="stat-label">Días a la semana</div>
+    </div>
+    <div class="stat-block" data-target="29" data-prefix="Jer " data-suffix=":11">
+      <div class="stat-num" id="stat2">Jer 0</div>
+      <div class="stat-divider"></div>
+      <div class="stat-label">Nuestra promesa</div>
+    </div>
+    <div class="stat-block" data-target="1" data-prefix="" data-suffix="">
+      <div class="stat-num" id="stat3">0</div>
+      <div class="stat-divider"></div>
+      <div class="stat-label">Comunidad · Tarrazú</div>
+    </div>
+  </div>
+</div>
+
+<section class="contacto" id="contacto">
+  <div class="contacto-inner">
+    <div class="anim-fade-left">
+      <p class="section-label">Estamos aquí para ti</p>
+      <h2 class="section-title">Contáctanos</h2>
+      <div class="divider"></div>
+      <p class="section-body" style="margin-bottom:2rem;">Dinos en qué podemos ayudarte. Nos amamos en Cristo Jesús.</p>
+      <div class="contact-info-item">
+        <span class="contact-info-label">Ubicación</span>
+        <span class="contact-info-value">San Marcos, Santa Cecilia — Tarrazú, Costa Rica</span>
+      </div>
+      <div class="contact-info-item">
+        <span class="contact-info-label">Teléfono</span>
+        <span class="contact-info-value"><a href="tel:60367850">6036 7850</a></span>
+      </div>
+      <div class="contact-info-item">
+        <span class="contact-info-label">Correo electrónico</span>
+        <span class="contact-info-value"><a href="mailto:iglesiafarodelevangelio@gmail.com">iglesiafarodelevangelio@gmail.com</a></span>
+      </div>
+      <div class="contact-info-item">
+        <span class="contact-info-label">Redes sociales</span>
+        <div class="social-links">
+          <a href="https://www.facebook.com/p/Iglesia-Cristiana-Faro-del-Evangelio-Tarraz%C3%BA-100083223376142/" target="_blank" class="social-btn">Facebook</a>
+          <a href="https://www.instagram.com/iglesia_faro_tarrazu/reels/" target="_blank" class="social-btn">Instagram</a>
+        </div>
+      </div>
+    </div>
+    <div class="anim-fade-right">
+      <form id="contactForm" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Tu nombre" required />
+          </div>
+          <div class="form-group">
+            <label>Apellido</label>
+            <input type="text" placeholder="Tu apellido" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" placeholder="Tu número de teléfono" />
+        </div>
+        <div class="form-group">
+          <label>Asunto</label>
+          <select>
+            <option value="">Selecciona un motivo...</option>
+            <option>Quiero iniciar discipulado</option>
+            <option>Quiero servir en la iglesia</option>
+            <option>Necesito hablar con alguien</option>
+            <option>Información general</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mensaje</label>
+          <textarea placeholder="Déjanos tu mensaje..."></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%;">Enviar mensaje</button>
+      </form>
+      <div class="form-success" id="formSuccess">
+        ¡Gracias por tu mensaje!<br>
+        <span style="font-size:0.9rem; color:#a09880; font-family:'Lato',sans-serif; font-weight:300;">Nos pondremos en contacto contigo pronto.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <img src="logo.jpeg" alt="Logo" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:2px solid rgba(212,175,110,0.3); margin-bottom:1rem;" />
+  <div class="footer-logo">Descubriendo Tu Lugar</div>
+  <p class="footer-text">Iglesia Cristiana Faro del Evangelio · Tarrazú, Costa Rica</p>
+  <p class="footer-text" style="margin-top:0.5rem;">Jesús es el Señor · Juan 14:6</p>
+</footer>
+
+<script>
+  // Nav shrink on scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 80);
+  });
+
+  // Hero bg zoom out on load
+  window.addEventListener('load', () => {
+    document.getElementById('heroBg').classList.add('loaded');
+  });
+
+  // Scroll animations
+  const animItems = document.querySelectorAll('.anim-fade-up, .anim-fade-left, .anim-fade-right, .anim-zoom, .anim-stagger');
+  const dividers  = document.querySelectorAll('.divider');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  animItems.forEach(el => observer.observe(el));
+
+  // Divider expand animation
+  const divObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('expanded'); divObs.unobserve(e.target); } });
+  }, { threshold: 0.5 });
+  dividers.forEach(d => divObs.observe(d));
+
+  // Animated counters
+  let countersDone = false;
+  function animateCounters() {
+    if (countersDone) return;
+    countersDone = true;
+    const blocks = document.querySelectorAll('.stat-block');
+    blocks.forEach((block, i) => {
+      block.classList.add('visible');
+      const target  = +block.dataset.target;
+      const prefix  = block.dataset.prefix || '';
+      const suffix  = block.dataset.suffix || '';
+      const el      = block.querySelector('.stat-num');
+      const duration = 1400;
+      const delay    = i * 150;
+      let start = null;
+      setTimeout(() => {
+        function step(ts) {
+          if (!start) start = ts;
+          const progress = Math.min((ts - start) / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const val = Math.round(ease * target);
+          el.textContent = prefix + val + suffix;
+          if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }, delay);
+    });
+  }
+
+  const statsObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) animateCounters(); });
+  }, { threshold: 0.3 });
+  statsObs.observe(document.getElementById('statsSection'));
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
+</body>
+</html>
