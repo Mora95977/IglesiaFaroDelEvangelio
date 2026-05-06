@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,7 +13,10 @@
 
   nav { position: fixed; top: 0; width: 100%; background: rgba(10,10,20,0.92); backdrop-filter: blur(8px); z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; border-bottom: 1px solid rgba(212,175,110,0.2); transition: padding 0.3s; }
   nav.scrolled { padding: 0.6rem 3rem; }
-  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #d4af6e; letter-spacing: 1px; }
+  .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .nav-logo img { height: 42px; width: 42px; object-fit: cover; border-radius: 50%; border: 1px solid rgba(212,175,110,0.4); transition: transform 0.3s; }
+  .nav-logo img:hover { transform: rotate(5deg) scale(1.05); }
+  .nav-logo span { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #d4af6e; letter-spacing: 1px; }
   .nav-links { display: flex; gap: 2rem; }
   .nav-links a { color: #c8c0b0; text-decoration: none; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.3s; position: relative; }
   .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: #d4af6e; transition: width 0.3s; }
@@ -177,7 +182,10 @@
 <body>
 
 <nav id="mainNav">
-  <div class="nav-logo">Descubriendo Tu Lugar</div>
+  <a href="#" class="nav-logo">
+    <img src="logo.jpeg" alt="Logo Iglesia Faro del Evangelio" />
+    <span>Descubriendo Tu Lugar</span>
+  </a>
   <div class="nav-links">
     <a href="#acerca">Acerca</a>
     <a href="#ministerios">Ministerios</a>
@@ -270,7 +278,7 @@
         </div>
       </div>
       <div class="min-card anim-stagger" style="transition-delay:0.3s">
-        <img src="GENERAL_jpg.jpeg" alt="Culto General" />
+        <img src="GENERAL.jpg.jpeg" alt="Culto General" />
         <div class="min-overlay">
           <span class="min-tag">Congregación</span>
           <span class="min-title">Culto General</span>
@@ -278,19 +286,19 @@
         </div>
       </div>
       <div class="min-card anim-stagger" style="transition-delay:0.4s">
-        <img src="GRUPO1_jpg.jpeg" alt="Grupos de Estudio" />
+        <img src="GRUPO2.jpg.jpeg" alt="Ministerio de Alabanza" />
         <div class="min-overlay">
-          <span class="min-tag">Comunidad</span>
-          <span class="min-title">Grupos de Estudio</span>
-          <span class="min-desc">Estudio bíblico en grupos pequeños de comunión.</span>
+          <span class="min-tag">Música</span>
+          <span class="min-title">Ministerio de Alabanza</span>
+          <span class="min-desc">Guiamos la congregación en adoración con excelencia.</span>
         </div>
       </div>
       <div class="min-card anim-stagger" style="transition-delay:0.5s">
-        <img src="GRUPO2_jpg.jpeg" alt="Grupos de Estudio" />
+        <img src="GRUPO1.jpg.jpeg" alt="Ministerio de Jóvenes" />
         <div class="min-overlay">
-          <span class="min-tag">Comunidad</span>
-          <span class="min-title">Grupos de Estudio</span>
-          <span class="min-desc">Formación continua en la Palabra de Dios.</span>
+          <span class="min-tag">Jóvenes</span>
+          <span class="min-title">Ministerio de Jóvenes</span>
+          <span class="min-desc">Crecimiento espiritual y participación activa juvenil.</span>
         </div>
       </div>
     </div>
@@ -362,10 +370,10 @@
 <section class="worship">
   <div class="worship-inner">
     <div class="worship-imgs anim-zoom">
-      <img src="GRUPO1_jpg.jpeg" alt="Alabanza" />
-      <img src="GRANERO_jpg.jpeg" alt="Granero" />
+      <img src="GRUPO1.jpg.jpeg" alt="Alabanza" />
+      <img src="GRANERO.jpg.jpeg" alt="Granero" />
       <img src="DIBUJO.jpeg" alt="Niños coloreando" />
-      <img src="GENERAL_jpg.jpeg" alt="Culto" />
+      <img src="GENERAL.jpg.jpeg" alt="Culto" />
     </div>
     <div class="anim-fade-right">
       <p class="section-label">Alabanza y adoración</p>
@@ -391,7 +399,7 @@
       <a href="#contacto" class="btn-outline" style="margin-top:1rem; display:inline-block;">Quiero ayudar</a>
     </div>
     <div class="anim-fade-right">
-      <img class="granero-img" src="GRANERO_jpg.jpeg" alt="El Granero" />
+      <img class="granero-img" src="GRANERO.jpg.jpeg" alt="El Granero" />
     </div>
   </div>
 </section>
@@ -491,8 +499,9 @@
 </section>
 
 <footer>
+  <img src="logo.jpeg" alt="Logo" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:2px solid rgba(212,175,110,0.3); margin-bottom:1rem;" />
   <div class="footer-logo">Descubriendo Tu Lugar</div>
-  <p class="footer-text">Iglesia Faro del Evangelio · Tarrazú, Costa Rica</p>
+  <p class="footer-text">Iglesia Cristiana Faro del Evangelio · Tarrazú, Costa Rica</p>
   <p class="footer-text" style="margin-top:0.5rem;">Jesús es el Señor · Juan 14:6</p>
 </footer>
 
@@ -579,4 +588,3 @@
 </script>
 </body>
 </html>
-
